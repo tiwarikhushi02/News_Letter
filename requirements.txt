@@ -1,0 +1,8 @@
+langchain
+langchain-google-genai
+python-dotenv
+requests
+fastapi
+uvicorn
+jinja2
+python-multipart
