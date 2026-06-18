@@ -1,9 +1,86 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Subscription Successful</title>
-    </head>
-    <body>
-        <h1>Subscription Successful!</h1>
-        <p>Thank you for subscribing to our newsletter.</p>
-    </body>
+<head>
+    <title>Subscription Successful</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:Arial, sans-serif;
+            background:linear-gradient(135deg, #2563eb, #7c3aed);
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .container{
+            background:white;
+            width:450px;
+            padding:40px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow:0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .icon{
+            font-size:70px;
+            margin-bottom:15px;
+        }
+
+        h1{
+            color:#10b981;
+            margin-bottom:15px;
+        }
+
+        p{
+            color:#64748b;
+            line-height:1.6;
+            margin-bottom:25px;
+        }
+
+        .button{
+            display:inline-block;
+            background:#2563eb;
+            color:white;
+            text-decoration:none;
+            padding:12px 24px;
+            border-radius:10px;
+            transition:0.3s;
+        }
+
+        .button:hover{
+            background:#1d4ed8;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="icon">✅</div>
+
+    <h1>Subscription Successful!</h1>
+
+    <p>
+        Thank you for subscribing to our AI-Powered Daily News Digest.
+        You'll start receiving AI-generated news summaries directly in your inbox.
+    </p>
+
+    <a href="/" class="button">
+        Back to Home
+    </a>
+
+</div>
+
+</body>
 </html>

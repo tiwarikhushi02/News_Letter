@@ -1,23 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>News Daily</title>
+    <title>AI-Powered Daily News Digest</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .container{
+            background:white;
+            width:450px;
+            padding:40px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow:0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .logo{
+            font-size:60px;
+            margin-bottom:10px;
+        }
+
+        h1{
+            color:#1e293b;
+            margin-bottom:15px;
+        }
+
+        .subtitle{
+            color:#64748b;
+            margin-bottom:30px;
+            line-height:1.6;
+        }
+
+        input{
+            width:100%;
+            padding:14px;
+            border:1px solid #d1d5db;
+            border-radius:10px;
+            font-size:16px;
+            margin-bottom:15px;
+            outline:none;
+        }
+
+        input:focus{
+            border-color:#2563eb;
+        }
+
+        button{
+            width:100%;
+            padding:14px;
+            background:#2563eb;
+            color:white;
+            border:none;
+            border-radius:10px;
+            font-size:16px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#1d4ed8;
+            transform:translateY(-2px);
+        }
+
+        .footer{
+            margin-top:20px;
+            color:#64748b;
+            font-size:14px;
+        }
+
+    </style>
+
 </head>
+
 <body>
 
-<h1>Subscribe to AI News Daily</h1>
+<div class="container">
 
-<form action="/subscribe" method="post">
-    <input
-        type="email"
-        name="email"
-        placeholder="Enter email"
-        required>
+    <div class="logo">📰</div>
 
-    <button type="submit">
-        Subscribe
-    </button>
-</form>
+    <h1>AI-Powered Daily News Digest</h1>
+
+    <p class="subtitle">
+        Get the world's most important news summarized by AI and delivered directly to your inbox every day.
+    </p>
+
+    <form action="/subscribe" method="post">
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            required>
+
+        <button type="submit">
+            Subscribe Free
+        </button>
+
+    </form>
+
+    <div class="footer">
+        Daily • Free • AI Generated
+    </div>
+
+</div>
 
 </body>
 </html>

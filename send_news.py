@@ -1,3 +1,5 @@
+with open("task_log.txt", "a") as f:
+    f.write("Task Started\n")
 from langchain.chat_models import init_chat_model
 import os
 import requests
@@ -38,9 +40,9 @@ def fetch_news():
 # AI summarizing the news
 def summarize_news(headlines):
     model = init_chat_model(
-    model="gemini-2.5-flash",
-    model_provider="google-genai",
-    api_key=GOOGLE_API_KEY
+        model="gemini-2.5-flash",
+        model_provider="google-genai",
+        api_key=GOOGLE_API_KEY
     )
 
     prompt = f"""
@@ -53,10 +55,20 @@ In the second paragraph explain the possible impact on business, markets, and so
 Headlines:
 {headlines}
 """
+
     response = model.invoke(prompt)
     response_str = response.content
+
+    # Plain text headlines
     headlines_text = "• " + "\n• ".join(headlines)
 
+    # HTML headlines
+    headlines_html = ""
+
+    for headline in headlines:
+        headlines_html += f"<li>{headline}</li>"
+
+    # Plain text email
     body = f"""
 TOP HEADLINES
 
@@ -74,23 +86,96 @@ To unsubscribe:
 http://127.0.0.1:8000/unsubscribe
 """
 
-    
-    return body
+    # HTML email
+    html_body = f"""
+<html>
+<body style="
+font-family: Arial, sans-serif;
+max-width:700px;
+margin:auto;
+padding:20px;
+background-color:#f8fafc;
+">
+
+<h1 style="color:#2563eb;">
+📰 AI-Powered Daily News Digest
+</h1>
+
+<p style="color:#666;">
+Your daily AI-generated news briefing
+</p>
+
+<hr>
+
+<h2>Top Headlines</h2>
+
+<div style="
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+">
+<ul>
+{headlines_html}
+</ul>
+</div>
+
+<br>
+
+<h2>AI Summary</h2>
+
+<div style="
+background:#eef6ff;
+padding:15px;
+border-radius:10px;
+line-height:1.6;
+">
+{response_str}
+</div>
+
+<br>
+
+<hr>
+
+<p>
+<a
+href="http://127.0.0.1:8000/unsubscribe"
+style="
+background:#ef4444;
+color:white;
+padding:10px 16px;
+text-decoration:none;
+border-radius:6px;
+">
+Unsubscribe
+</a>
+</p>
+
+</body>
+</html>
+"""
+
+    return body, html_body
 
 
 
-def send_newsletter(body):
+def send_newsletter(body, html_body):
     subscribers = database.get_subscribers()
 
     for subscriber in subscribers:
-     email = subscriber[1]
-     send_email(
-             receiver=email,
-            message=body
+        email = subscriber[1]
+
+        send_email(
+            receiver=email,
+            message=body,
+            html=html_body
         )
-     print(f"Sent to {email}")
+
+        print(f"Sent to {email}")
 
 articles = fetch_news()
+with open("task_log.txt", "a") as f:
+    f.write("News Fetched\n")
 
 headlines = []
 
@@ -101,7 +186,7 @@ print(headlines)
 headlines_text = "• " + "\n• ".join(headlines)
 
 print(headlines_text)
-body = summarize_news(headlines)
+body, html_body = summarize_news(headlines)
 
-send_newsletter(body)
+send_newsletter(body, html_body)
         

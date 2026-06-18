@@ -1,14 +1,126 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Unsubscribe Form</title>
-    </head>
-    <body>
-        <h1>Unsubscribe from AI_NewsLetter</h1>
-        <form action="/unsubscribe" method ="POST">
-            <label for="email">Email:</label>
-            <input type="email" id ="email" name="email" required>
-            <button type="submit">Unsubscribe</button>
-        </form>
-    </body>
+<head>
+    <title>Unsubscribe</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:Arial, sans-serif;
+            background:linear-gradient(135deg, #ef4444, #dc2626);
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .container{
+            background:white;
+            width:450px;
+            padding:40px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow:0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .icon{
+            font-size:60px;
+            margin-bottom:15px;
+        }
+
+        h1{
+            color:#ef4444;
+            margin-bottom:15px;
+        }
+
+        p{
+            color:#64748b;
+            line-height:1.6;
+            margin-bottom:25px;
+        }
+
+        input{
+            width:100%;
+            padding:14px;
+            border:1px solid #d1d5db;
+            border-radius:10px;
+            font-size:16px;
+            margin-bottom:15px;
+            outline:none;
+        }
+
+        input:focus{
+            border-color:#ef4444;
+        }
+
+        button{
+            width:100%;
+            padding:14px;
+            background:#ef4444;
+            color:white;
+            border:none;
+            border-radius:10px;
+            font-size:16px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#dc2626;
+            transform:translateY(-2px);
+        }
+
+        .home-link{
+            display:block;
+            margin-top:20px;
+            color:#2563eb;
+            text-decoration:none;
+            font-size:14px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="icon">📭</div>
+
+    <h1>Unsubscribe</h1>
+
+    <p>
+        Enter your email address below to stop receiving our
+        AI-Powered Daily News Digest.
+    </p>
+
+    <form action="/unsubscribe" method="POST">
+
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            required>
+
+        <button type="submit">
+            Unsubscribe
+        </button>
+
+    </form>
+
+    <a href="/" class="home-link">
+        ← Back to Home
+    </a>
+
+</div>
+
+</body>
 </html>

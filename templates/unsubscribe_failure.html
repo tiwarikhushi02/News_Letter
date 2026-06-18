@@ -1,10 +1,86 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Unsubscribe Failed</title>
-    </head>
-    <body>
-        <h1>Unsubscribe Failed</h1>
-        <p>Sorry, we couldn't find your email in our subscriber list.</p>
-    </body>
+<head>
+    <title>Unsubscribe Failed</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:Arial, sans-serif;
+            background:linear-gradient(135deg, #ef4444, #dc2626);
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .container{
+            background:white;
+            width:450px;
+            padding:40px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow:0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .icon{
+            font-size:70px;
+            margin-bottom:15px;
+        }
+
+        h1{
+            color:#ef4444;
+            margin-bottom:15px;
+        }
+
+        p{
+            color:#64748b;
+            line-height:1.6;
+            margin-bottom:25px;
+        }
+
+        .button{
+            display:inline-block;
+            background:#2563eb;
+            color:white;
+            text-decoration:none;
+            padding:12px 24px;
+            border-radius:10px;
+            transition:0.3s;
+        }
+
+        .button:hover{
+            background:#1d4ed8;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="icon">❌</div>
+
+    <h1>Unsubscribe Failed</h1>
+
+    <p>
+        Sorry, we couldn't find your email address in our subscriber list.
+        Please check the email and try again.
+    </p>
+
+    <a href="/unsubscribe" class="button">
+        Try Again
+    </a>
+
+</div>
+
+</body>
 </html>
