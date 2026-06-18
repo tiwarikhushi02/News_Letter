@@ -50,3 +50,20 @@ def get_subscribers():
     conn.close()
 
     return users
+    
+
+def remove_subscriber(email):
+    conn = sqlite3.connect("subscribers.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "DELETE FROM subscribers WHERE email = ?",
+        (email,)
+    )
+    success = cursor.rowcount    
+    conn.commit()
+    conn.close()
+    if success > 0:
+        return True
+    else:
+        return False

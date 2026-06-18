@@ -1,4 +1,4 @@
-from database import add_subscriber, get_subscribers, init_db
+from database import add_subscriber, get_subscribers, init_db, remove_subscriber
 from fastapi import FastAPI, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -27,4 +27,25 @@ def subscribe(request:Request, email:str=Form(...)):
         return templates.TemplateResponse(
             request=request,
             name="user_exist.html"
+        )
+    
+@app.get("/unsubscribe")
+def unsubscribe(request:Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="unsubscribe.html",
+    )    
+    
+@app.post("/unsubscribe")
+def unsubscribe(request:Request, email:str=Form(...)):
+    success=remove_subscriber(email)
+    if success:
+        return templates.TemplateResponse(
+            request=request,
+            name="unsubscribe_success.html"
+        )
+    else:
+        return templates.TemplateResponse(
+            request=request,
+            name="unsubscribe_failure.html"
         )

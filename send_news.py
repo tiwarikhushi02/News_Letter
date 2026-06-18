@@ -11,16 +11,15 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 NEWS_API_KEY = os.getenv("NEWS_API_KEY")
 gmail_app_password = os.getenv("gmail_app_password")
 
-print("NEWS_API_KEY:", NEWS_API_KEY)
-print(type(NEWS_API_KEY))
+
 
 
 def fetch_news():
     url = (
-    "https://newsapi.org/v2/top-headlines?"
-    "category=business&"
+    "https://newsapi.org/v2/everything?"
+    "q=world OR politics OR technology OR business&"
     "language=en&"
-    "pageSize=8&"
+    "pageSize=20&"
     "sortBy=publishedAt&apiKey=" + NEWS_API_KEY)
 
     # Make request
@@ -28,18 +27,16 @@ def fetch_news():
 
     # Get a dictionary with data
     content = request.json()
+   
     if "articles" not in content:
         print("API Error:", content)
         exit()
     articles = content["articles"]
     return articles
 
-articles = fetch_news()
-
-
 
 # AI summarizing the news
-def summarize_news(articles):
+def summarize_news(headlines):
     model = init_chat_model(
     model="gemini-2.5-flash",
     model_provider="google-genai",
@@ -47,22 +44,40 @@ def summarize_news(articles):
     )
 
     prompt = f"""
-    You're a news summarizer.
-    Write a short paragraph analyzing those news.
-    Add another second paragraph to tell me
-    how they affect the stock market.
-    Here are the news articles:
-    {articles}
-    """
+You are a news analyst.
+
+Summarize today's major news headlines in 2 short paragraphs.
+
+In the second paragraph explain the possible impact on business, markets, and society.
+
+Headlines:
+{headlines}
+"""
     response = model.invoke(prompt)
     response_str = response.content
+    headlines_text = "• " + "\n• ".join(headlines)
+    body = f"""Subject: Daily News Digest
 
-    body = "Subject: News Summary\n\n" + response_str + "\n\n"
+TOP HEADLINES
+
+{headlines_text}
+
+--------------------------------
+
+AI SUMMARY
+
+{response_str}
+
+--------------------------------
+
+To unsubscribe:
+http://127.0.0.1:8000/unsubscribe
+"""
 
     body = body.encode("utf-8")
     return body
 
-body = summarize_news(articles)
+
 
 def send_newsletter(body):
     subscribers = database.get_subscribers()
@@ -74,5 +89,19 @@ def send_newsletter(body):
             message=body
         )
      print(f"Sent to {email}")
+
+articles = fetch_news()
+
+headlines = []
+
+for article in articles:
+    headlines.append(article["title"])
+
+print(headlines)
+headlines_text = "• " + "\n• ".join(headlines)
+
+print(headlines_text)
+body = summarize_news(headlines)
+
 send_newsletter(body)
         
