@@ -56,8 +56,8 @@ Headlines:
     response = model.invoke(prompt)
     response_str = response.content
     headlines_text = "• " + "\n• ".join(headlines)
-    body = f"""Subject: Daily News Digest
 
+    body = f"""
 TOP HEADLINES
 
 {headlines_text}
@@ -74,7 +74,7 @@ To unsubscribe:
 http://127.0.0.1:8000/unsubscribe
 """
 
-    body = body.encode("utf-8")
+    
     return body
 
 
