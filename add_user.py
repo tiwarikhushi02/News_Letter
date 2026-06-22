@@ -1,4 +1,4 @@
-from database import init_db, add_subscriber
+from postgres_database.database import init_db, add_subscriber
 
 init_db()  # creates table if missing
 

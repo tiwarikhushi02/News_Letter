@@ -1,10 +1,9 @@
-with open("task_log.txt", "a") as f:
-    f.write("Task Started\n")
+
 from langchain.chat_models import init_chat_model
 import os
 import requests
 from send_email import send_email
-import database
+from postgres_database import database
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -173,20 +172,27 @@ def send_newsletter(body, html_body):
 
         print(f"Sent to {email}")
 
-articles = fetch_news()
-with open("task_log.txt", "a") as f:
-    f.write("News Fetched\n")
+def run_daily_newsletter():
+    articles = fetch_news()
 
-headlines = []
+    with open("task_log.txt", "a") as f:
+        f.write("News Fetched\n")
 
-for article in articles:
-    headlines.append(article["title"])
+    headlines = []
 
-print(headlines)
-headlines_text = "• " + "\n• ".join(headlines)
+    for article in articles:
+        headlines.append(article["title"])
 
-print(headlines_text)
-body, html_body = summarize_news(headlines)
+    print(headlines)
+    headlines_text = "• " + "\n• ".join(headlines)
 
-send_newsletter(body, html_body)
+    print(headlines_text)
+    body, html_body = summarize_news(headlines)
+
+    send_newsletter(body, html_body)
+
+if __name__ == "__main__":
+    run_daily_newsletter()
+
+
         

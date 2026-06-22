@@ -1,12 +1,45 @@
-from database import add_subscriber, get_subscribers, init_db, remove_subscriber
+from sched import scheduler
+from contextlib import asynccontextmanager
+
+from postgres_database.database import (
+    add_subscriber,
+    get_subscribers,
+    init_db,
+    remove_subscriber
+)
 from fastapi import FastAPI, Request, Form
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
+from send_news import run_daily_newsletter
 
 
+scheduler = AsyncIOScheduler()
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Ensure database tables exist
+    init_db()
+    
+    # Schedule sending daily newsletter email at 6:00 AM local time
+    scheduler.add_job(
+        run_daily_newsletter,
+        #CronTrigger(hour=6, minute=0),
+        CronTrigger(minute="*/5"),
+        id="daily_newsletter_job",
+        replace_existing=True
+    )
+    scheduler.start()
+    print("Scheduler started. Daily newsletter job scheduled for 6:00 AM.")
+    yield
+    scheduler.shutdown()
+    print("Scheduler shut down.")
+
+app = FastAPI(lifespan=lifespan)
 templates = Jinja2Templates(directory="templates")
+
+
 
 @app.get("/")
 def home(request: Request):
