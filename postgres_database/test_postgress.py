@@ -2,7 +2,9 @@ import psycopg2
 import os
 from dotenv import load_dotenv
 import database
+from postgres_database.database import get_subscribers
 
+print(get_subscribers())
 
 load_dotenv()
 
