@@ -210,6 +210,10 @@ def admin_login(
     password: str = Form(...)
 ):
 
+    print("ENV USERNAME:", os.getenv("ADMIN_USERNAME"))
+    print("ENV PASSWORD:", os.getenv("ADMIN_PASSWORD"))
+    print("SECRET KEY:", os.getenv("SECRET_KEY"))
+
     if (
         username == os.getenv("ADMIN_USERNAME")
         and
@@ -218,10 +222,14 @@ def admin_login(
 
         request.session["admin"] = True
 
+        print("SESSION AFTER LOGIN:", dict(request.session))
+
         return RedirectResponse(
             url="/dashboard",
             status_code=303
         )
+
+    print("❌ Invalid Login")
 
     return templates.TemplateResponse(
         request=request,
@@ -233,12 +241,16 @@ def admin_login(
 @app.get("/dashboard")
 def dashboard(request: Request):
 
-    if not request.session.get("admin"):
+    print("SESSION DATA:", dict(request.session))
 
+    if not request.session.get("admin"):
+        print("❌ Not Logged In")
         return RedirectResponse(
             url="/admin",
             status_code=303
         )
+
+    print("✅ Logged In")
 
     return templates.TemplateResponse(
         request=request,
