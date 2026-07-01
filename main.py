@@ -25,8 +25,7 @@ async def lifespan(app: FastAPI):
     # Schedule sending daily newsletter email at 6:00 AM local time
     scheduler.add_job(
         run_daily_newsletter,
-        #CronTrigger(hour=6, minute=0),
-        CronTrigger(minute="*/5"),
+        CronTrigger(hour=6, minute=0),
         id="daily_newsletter_job",
         replace_existing=True
     )

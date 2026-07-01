@@ -47,3 +47,4 @@ Task Started
 News Fetched
 News Fetched
 News Fetched
+News Fetched
