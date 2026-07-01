@@ -1,34 +1,30 @@
-import psycopg2
-import os
-from dotenv import load_dotenv
 import database
-from postgres_database.database import get_subscribers
 
-print(get_subscribers())
-
-load_dotenv()
-
-conn = psycopg2.connect(os.getenv("DATABASE_URL"))
-
+conn = database.get_connection()
 cursor = conn.cursor()
 
+# Show all tables
 cursor.execute("""
 SELECT table_name
 FROM information_schema.tables
-WHERE table_schema='public';
+WHERE table_schema = 'public';
 """)
 
+print("Tables:")
 print(cursor.fetchall())
 
-import database
+# Show all columns of subscribers table
+cursor.execute("""
+SELECT column_name
+FROM information_schema.columns
+WHERE table_name = 'subscribers';
+""")
 
-result = database.add_subscriber(
-    "test@gmail.com"
-)
+print("\nSubscribers Table Columns:")
+print(cursor.fetchall())
 
-print(result)
-print(
-    database.get_subscribers()
-)
+# Show subscribers
+print("\nSubscribers:")
+print(database.get_subscribers())
 
 conn.close()

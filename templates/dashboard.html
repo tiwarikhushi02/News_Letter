@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Newsletter Admin Dashboard</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#0F172A,#1E3A8A);
+            color:white;
+            min-height:100vh;
+        }
+
+        nav{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:20px 60px;
+            background:rgba(255,255,255,.08);
+            backdrop-filter:blur(15px);
+        }
+
+        nav h2{
+            font-size:28px;
+        }
+
+        nav a{
+            color:white;
+            text-decoration:none;
+            background:#EF4444;
+            padding:10px 18px;
+            border-radius:8px;
+            transition:.3s;
+        }
+
+        nav a:hover{
+            background:#DC2626;
+        }
+
+        .container{
+            width:90%;
+            max-width:1300px;
+            margin:auto;
+            padding:40px 0;
+        }
+
+        .hero{
+            text-align:center;
+            margin-bottom:45px;
+        }
+
+        .hero h1{
+            font-size:42px;
+            margin-bottom:10px;
+        }
+
+        .hero p{
+            color:#D1D5DB;
+            font-size:18px;
+        }
+
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+            gap:25px;
+        }
+
+        .card{
+            background:rgba(255,255,255,.12);
+            backdrop-filter:blur(18px);
+            border-radius:18px;
+            padding:30px;
+            transition:.3s;
+            box-shadow:0 10px 25px rgba(0,0,0,.25);
+        }
+
+        .card:hover{
+            transform:translateY(-8px);
+        }
+
+        .card h3{
+            font-size:18px;
+            margin-bottom:20px;
+            color:#E5E7EB;
+        }
+
+        .card h2{
+            font-size:42px;
+        }
+
+        .green{
+            color:#22C55E;
+        }
+
+        .blue{
+            color:#60A5FA;
+        }
+
+        .yellow{
+            color:#FACC15;
+        }
+
+        .pink{
+            color:#EC4899;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav>
+
+    <h2>🤖 AI Newsletter</h2>
+
+    <a href="/logout">Logout</a>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="hero">
+
+        <h1>Admin Dashboard</h1>
+
+        <p>
+            Manage Subscribers, OTP Verification and Daily Newsletter
+        </p>
+
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>👥 Total Subscribers</h3>
+
+            <h2 class="blue">
+                {{ total_subscribers }}
+            </h2>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>📧 Pending Verification</h3>
+
+            <h2 class="yellow">
+                {{ pending }}
+            </h2>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>🟢 Newsletter Status</h3>
+
+            <h2 class="green">
+                {{ status }}
+            </h2>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>⏰ Schedule</h3>
+
+            <h2 class="pink">
+                {{ schedule }}
+            </h2>
+
+        </div>
+
+    </div>
+
+    <!-- PART 2 STARTS HERE -->
+
+    <!-- Latest Subscribers -->
+
+<div style="margin-top:50px;">
+
+    <h2 style="margin-bottom:20px;">
+        📬 Latest Subscribers
+    </h2>
+
+    <table style="
+        width:100%;
+        border-collapse:collapse;
+        background:rgba(255,255,255,.10);
+        backdrop-filter:blur(15px);
+        border-radius:15px;
+        overflow:hidden;
+    ">
+
+        <tr style="background:rgba(255,255,255,.15);">
+
+            <th style="padding:18px;">Email</th>
+            <th style="padding:18px;">Subscribed At</th>
+
+        </tr>
+
+        {% for user in latest_subscribers %}
+
+        <tr>
+
+            <td style="padding:18px;text-align:center;">
+                {{ user[0] }}
+            </td>
+
+            <td style="padding:18px;text-align:center;">
+                {{ user[1].strftime('%d %b %Y %I:%M %p') }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+
+<!-- Quick Actions -->
+
+<div style="
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+    margin-top:50px;
+">
+
+    <!-- Search -->
+
+    <div class="card">
+
+        <h3>🔍 Search Subscriber</h3>
+
+        <form action="/search-subscriber" method="POST">
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter email"
+                required
+                style="
+                    width:100%;
+                    padding:12px;
+                    border:none;
+                    border-radius:8px;
+                    margin-bottom:15px;
+                ">
+
+            <button
+                type="submit"
+                style="
+                    width:100%;
+                    padding:12px;
+                    border:none;
+                    border-radius:8px;
+                    background:#2563EB;
+                    color:white;
+                    cursor:pointer;
+                ">
+
+                Search
+
+            </button>
+
+        </form>
+        {% if searched %}
+
+    {% if search_result %}
+
+        <div style="
+            margin-top:20px;
+            padding:15px;
+            background:#22C55E;
+            border-radius:10px;
+            color:white;
+        ">
+
+            <strong>✅ Subscriber Found</strong>
+
+            <br><br>
+
+            📧 {{ search_result[0] }}
+
+            <br><br>
+
+            📅 {{ search_result[1].strftime('%d %b %Y %I:%M %p') }}
+
+        </div>
+
+    {% else %}
+
+        <div style="
+            margin-top:20px;
+            padding:15px;
+            background:#EF4444;
+            border-radius:10px;
+            color:white;
+        ">
+
+            ❌ Subscriber not found.
+
+        </div>
+
+    {% endif %}
+
+{% endif %}
+
+    </div>
+
+
+    <!-- Remove -->
+
+    <div class="card">
+
+        <h3>❌ Remove Subscriber</h3>
+
+        <form action="/remove-subscriber" method="POST">
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter email"
+                required
+                style="
+                    width:100%;
+                    padding:12px;
+                    border:none;
+                    border-radius:8px;
+                    margin-bottom:15px;
+                ">
+
+            <button
+                type="submit"
+                style="
+                    width:100%;
+                    padding:12px;
+                    border:none;
+                    border-radius:8px;
+                    background:#DC2626;
+                    color:white;
+                    cursor:pointer;
+                ">
+
+                Remove Subscriber
+
+            </button>
+
+        </form>
+        {% if removed is defined %}
+
+    {% if removed %}
+
+        <div style="
+            margin-top:20px;
+            padding:15px;
+            background:#22C55E;
+            border-radius:10px;
+            color:white;
+        ">
+            ✅ Subscriber removed successfully.
+        </div>
+
+    {% else %}
+
+        <div style="
+            margin-top:20px;
+            padding:15px;
+            background:#EF4444;
+            border-radius:10px;
+            color:white;
+        ">
+            ❌ Subscriber not found.
+        </div>
+
+    {% endif %}
+
+{% endif %}
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

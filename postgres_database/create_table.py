@@ -13,8 +13,15 @@ cursor = conn.cursor()
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS subscribers(
     id SERIAL PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL
+    email VARCHAR(255) UNIQUE NOT NULL,
+    subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
+""")
+
+cursor.execute("""
+ALTER TABLE subscribers
+ADD COLUMN IF NOT EXISTS subscribed_at
+TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 """)
 
 conn.commit()
