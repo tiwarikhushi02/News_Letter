@@ -1,4 +1,4 @@
-from sched import scheduler
+
 from contextlib import asynccontextmanager
 import random
 
@@ -16,19 +16,13 @@ from postgres_database.database import (
     verify_otp,
     delete_pending_verification,
     subscriber_exists,
+    search_subscriber
 )
 from postgres_database.database import admin_remove_subscriber
 import re
 from starlette.middleware.sessions import SessionMiddleware
 import os
-from postgres_database.database import search_subscriber
 
-from postgres_database.database import (
-    add_subscriber,
-    get_subscribers,
-    init_db,
-    remove_subscriber
-)
 from fastapi import FastAPI, Request, Form
 from fastapi.templating import Jinja2Templates
 
@@ -180,20 +174,6 @@ def unsubscribe(request:Request, email:str=Form(...)):
             name="unsubscribe_failure.html"
         )
 
-@app.get("/dashboard")
-def dashboard(request: Request):
-
-    return templates.TemplateResponse(
-        request=request,
-        name="dashboard.html",
-        context={
-            "total_subscribers": get_total_subscribers(),
-            "pending": get_total_pending(),
-            "latest_subscribers": get_latest_subscribers(),
-            "status": "Running",
-            "schedule": "Every Day - 6:00 AM"
-        }
-    )
 
 @app.get("/admin")
 def admin(request: Request):
@@ -210,10 +190,6 @@ def admin_login(
     password: str = Form(...)
 ):
 
-    print("ENV USERNAME:", os.getenv("ADMIN_USERNAME"))
-    print("ENV PASSWORD:", os.getenv("ADMIN_PASSWORD"))
-    print("SECRET KEY:", os.getenv("SECRET_KEY"))
-
     if (
         username == os.getenv("ADMIN_USERNAME")
         and
@@ -222,14 +198,10 @@ def admin_login(
 
         request.session["admin"] = True
 
-        print("SESSION AFTER LOGIN:", dict(request.session))
-
         return RedirectResponse(
             url="/dashboard",
             status_code=303
         )
-
-    print("❌ Invalid Login")
 
     return templates.TemplateResponse(
         request=request,
@@ -241,16 +213,16 @@ def admin_login(
 @app.get("/dashboard")
 def dashboard(request: Request):
 
-    print("SESSION DATA:", dict(request.session))
+    print("SESSION:", dict(request.session))
 
     if not request.session.get("admin"):
-        print("❌ Not Logged In")
+        print("REDIRECTING TO LOGIN")
         return RedirectResponse(
             url="/admin",
             status_code=303
         )
 
-    print("✅ Logged In")
+    print("ALLOWING DASHBOARD")
 
     return templates.TemplateResponse(
         request=request,
@@ -311,4 +283,14 @@ def remove_subscriber_route(
             "removed": success,
             "searched": False
         }
+    )
+
+@app.get("/logout")
+def logout(request: Request):
+
+    request.session.clear()
+
+    return RedirectResponse(
+        url="/admin",
+        status_code=303
     )
